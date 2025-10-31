@@ -7,6 +7,8 @@ from utils.classification import classify_image
 from utils.detection import detect_items
 from app.database import get_collection
 from fastapi.middleware.cors import CORSMiddleware
+import os
+import uvicorn
 app = FastAPI(title="Food Recognition API")
 db_collection = get_collection("predictions")
 
@@ -41,3 +43,8 @@ async def predict(file: UploadFile = File(...)):
     response["_id"] = str(result.inserted_id)
 
     return JSONResponse(response)
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
